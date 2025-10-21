@@ -41,11 +41,11 @@ MV-Takte/
 ├── server_web.py          # FastAPI-Webserver (aktueller Stand, CSV, HTML)
 ├── server_modbus.py       # Modbus-Server-Logik
 ├── requirements.txt       # Python-Abhängigkeiten
-├── data/
+├── data/ (wird erst erstellt durch setup_mv_takte.sh)
 │   ├── MV1.csv            # CSV-Datei mit Tageswerten (wird automatisch angelegt)
 │   └── index.html         # (Optional) HTML-Ansicht der Daten
 ├── deployment/
-│   ├── mv-takte.service           # systemd-Service-Datei für Autostart
+│   ├── mv-takte.service           # systemd-Service-Datei für Autostart (wird erst erstellt durch setup_mv_takte.sh)
 │   ├── setup_mv_takte.sh          # Setup-Skript für Installation & Service
 │   └── remove_mv_takte_service.sh # Skript zum Entfernen des Services
 ```
@@ -99,20 +99,19 @@ Im Ordner `deployment/` findest du alle nötigen Dateien:
 
 - **Service einrichten und starten:**
   ```sh
-  cd deployment
-  bash setup_mv_takte.sh
+  bash deployment/setup_mv_takte.sh
   ```
   Das Skript installiert alle Abhängigkeiten, legt den `data`-Ordner automatisch an, erstellt die Service-Datei im Ordner `deployment` und richtet den systemd-Service ein. Der Service läuft mit dem aktuellen Benutzer (User=`whoami`). Nach der Einrichtung werden direkt die Live-Logs (`journalctl`) angezeigt.
 
   **Hinweis:**
+  - Bitte aus Projektverzeichnis die Bash Skripte ausführen
   - Die Service-Datei wird im Ordner `deployment` erstellt und nach `/etc/systemd/system/` kopiert.
   - Der Service läuft mit dem Benutzer, der das Setup-Skript ausführt. Python-Pakete sollten daher für diesen User installiert sein.
   - Falls Pakete fehlen, prüfe die Installation mit `pip3 install -r requirements.txt`.
 
 - **Service entfernen:**
   ```sh
-  cd deployment
-  bash remove_mv_takte_service.sh
+  bash deployment/remove_mv_takte_service.sh
   ```
 
 ---
