@@ -1,0 +1,6 @@
+# pip install -r requirements.txt --break-system-packages 
+# use break-system-packages or use a virtual environment to avoid permission issues
+gpiozero
+uvicorn
+fastapi
+pymodbus
