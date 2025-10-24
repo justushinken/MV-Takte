@@ -17,7 +17,7 @@ Dieses Projekt zählt Takte (z.B. von einem Taster), speichert Tageswerte in ein
 
 ## Voraussetzungen
 
-- Python 3.8+
+- Python 3.11+
 - Empfohlene Pakete (siehe `requirements.txt`):
 
   - `gpiozero` (nur für echte Hardware-Taster, auf Linux/Raspberry Pi)
