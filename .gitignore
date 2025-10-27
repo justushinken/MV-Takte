@@ -12,8 +12,8 @@ build/
 dist/
 
 # Ignore CSV and HTML output files
-MV1.csv
-index.html
+*.csv
+*.html
 
 # VS Code settings
 .vscode/

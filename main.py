@@ -18,6 +18,7 @@ import time
 from datetime import date
 from gpiozero import Button
 import server_modbus as modbus  # type: ignore[import-not-found]
+import socket
 
 SIMULIERE_TASTER = False  # Standard: Simulation aus
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -25,20 +26,14 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join(BASE_DIR, "data")
 os.makedirs(DATA_DIR, exist_ok=True)
 
-csv_datei = os.path.join(DATA_DIR, "MV1.csv")
+hostname = socket.gethostname()
+csv_datei = os.path.join(DATA_DIR, f"{hostname}.csv")
 html_datei = os.path.join(DATA_DIR, "index.html")
 csv_header = ["Datum", "Zaehlersand"]
 
 global letzter_tag
-letzter_tag = date.today().strftime("%Y-%m-%d")
 global zaehler
-zaehler = 0
 global context
-
-if not os.path.exists(csv_datei):
-    with open(csv_datei, mode='w', newline='', encoding='utf-8') as f:
-        writer = csv.writer(f, delimiter=';')
-        writer.writerow(csv_header)
 
 def lade_zaehlersand_und_datum():
     """Laedt den letzten Zaehlersand und das Datum aus der CSV-Datei."""
@@ -85,6 +80,7 @@ def schreibe_gesamtstand(datum, wert):
         writer.writerow(header)
         writer.writerows(zeilen)
 
+
 def zaehle_takt():
     """Erhoeht den Zaehlersand und speichert ihn, ggf. mit Tageswechsel."""
     global zaehler, letzter_tag
@@ -98,7 +94,6 @@ def zaehle_takt():
     datum_str = heute.strftime("%Y-%m-%d")
     print(f"Taktzahl {zaehler} am {datum_str}")
     schreibe_gesamtstand(datum_str, zaehler)
-    # erzeuge_html_aus_csv()  # Wuerde ich hier nicht bei jedem Takt aufrufen, sondern nur bei Abruf im Webserver
 
     if context:
         modbus.update_values(context.context, zaehler)
@@ -120,6 +115,18 @@ def simuliere_taster():
         time.sleep(2)
 
 if __name__ == "__main__":
+    print("Hostname:", hostname)
+
+    if not os.path.exists(csv_datei):
+        with open(csv_datei, mode='w', newline='', encoding='utf-8') as f:
+            writer = csv.writer(f, delimiter=';')
+            writer.writerow(csv_header)
+
+        zaehler = 0
+        letzter_tag = None
+    else:
+        lade_zaehlersand_und_datum()
+
     # Argumente parsen
     parser = argparse.ArgumentParser(description="MV-Takte: Taktzaehlung und Bereitstellung")
     parser.add_argument("--sim", action="store_true", help="Taster-Simulation aktivieren")
