@@ -3,7 +3,7 @@ from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
 import os
 import csv
 # Importiere die Variablen aus main.py
-from main import csv_datei, html_datei
+from main import csv_datei, html_datei, hostname
 
 def erzeuge_html_aus_csv():
     try:
@@ -23,47 +23,47 @@ def erzeuge_html_aus_csv():
         daten = []
 
     with open(html_datei, mode='w', encoding='utf-8') as f:
-        f.write("""<!DOCTYPE html>
+        f.write(f"""<!DOCTYPE html>
 <html lang="de">
 <head>
 <meta charset="UTF-8">
 <title>Zählerdaten MV1</title>
 <style>
-    body {
+    body {{
         font-family: Arial, sans-serif;
         margin: 40px;
         background-color: #f9f9f9;
         color: #333;
-    }
-    h1 {
+    }}
+    h1 {{
         color: #2c3e50;
-    }
-    table {
+    }}
+    table {{
         border-collapse: collapse;
         width: 60%;
         max-width: 800px;
         margin-bottom: 20px;
         box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         background-color: #fff;
-    }
-    th, td {
+    }}
+    th, td {{
         border: 1px solid #ddd;
         text-align: center;
         padding: 10px;
-    }
-    th {
+    }}
+    th {{
         background-color: #2980b9;
         color: white;
         text-transform: uppercase;
         letter-spacing: 0.05em;
-    }
-    tr:nth-child(even) {
+    }}
+    tr:nth-child(even) {{
         background-color: #ecf0f1;
-    }
-    tr:hover {
+    }}
+    tr:hover {{
         background-color: #d1e7fd;
-    }
-    a.download-link {
+    }}
+    a.download-link {{
         display: inline-block;
         margin-bottom: 15px;
         padding: 8px 15px;
@@ -71,20 +71,20 @@ def erzeuge_html_aus_csv():
         color: white;
         text-decoration: none;
         border-radius: 4px;
-    }
-    a.download-link:hover {
+    }}
+    a.download-link:hover {{
         background-color: #2073b8;
-    }
-    p.version {
+    }}
+    p.version {{
         font-size: 0.9em;
         color: #666;
         margin-top: 10px;
         font-style: italic;
-    }
+    }}
 </style>
 </head>
 <body>
-<h1>Zählerdaten - Tagesgesamtstand - MV1</h1>
+<h1>Zählerdaten - Tagesgesamtstand - {hostname}</h1>
 <table>
 """)
         if header:
